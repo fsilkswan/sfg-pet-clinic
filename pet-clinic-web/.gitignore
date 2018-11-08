@@ -29,3 +29,6 @@ classes/
 .classpath
 .project
 .springBeans
+
+# Maven
+target/
