@@ -32,4 +32,5 @@ classes/
 
 # Maven
 target/
+release.properties
 *.releaseBackup
