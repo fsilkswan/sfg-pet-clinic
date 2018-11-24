@@ -10,7 +10,7 @@ import guru.springframework.sfgpetclinic.services.CrudService;
 public abstract class AbstractMapService<T, ID>
     implements CrudService<T, ID>
 {
-    protected Map<ID, T> map = new HashMap<>();
+    private final Map<ID, T> map = new HashMap<>();
 
     @Override
     public void delete(final T entity)
@@ -36,7 +36,7 @@ public abstract class AbstractMapService<T, ID>
         return map.get(id);
     }
 
-    public T save(final ID id, final T entity)
+    protected final T save(final ID id, final T entity)
     {
         map.put(id, entity);
 

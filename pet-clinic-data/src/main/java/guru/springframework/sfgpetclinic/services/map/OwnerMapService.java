@@ -12,10 +12,9 @@ public final class OwnerMapService
     @Override
     public Owner findByLastName(final String lastName)
     {
-        final Optional<Owner> lastNameLookupResult = map.values()
-                                                        .stream()
-                                                        .filter(entry -> entry.getLastName().equals(lastName))
-                                                        .findFirst();
+        final Optional<Owner> lastNameLookupResult = findAll().stream()
+                                                              .filter(entry -> entry.getLastName().equals(lastName))
+                                                              .findFirst();
 
         return lastNameLookupResult.orElse(null);
     }
