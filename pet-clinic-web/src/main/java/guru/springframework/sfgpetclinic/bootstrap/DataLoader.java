@@ -1,5 +1,7 @@
 package guru.springframework.sfgpetclinic.bootstrap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -7,20 +9,22 @@ import guru.springframework.sfgpetclinic.model.Owner;
 import guru.springframework.sfgpetclinic.model.Vet;
 import guru.springframework.sfgpetclinic.services.OwnerService;
 import guru.springframework.sfgpetclinic.services.VetService;
-import guru.springframework.sfgpetclinic.services.map.OwnerMapService;
-import guru.springframework.sfgpetclinic.services.map.VetMapService;
 
 @Component
 public class DataLoader
     implements CommandLineRunner
 {
+    private final Logger       logger = LoggerFactory.getLogger(getClass());
     private final OwnerService ownerService;
     private final VetService   vetService;
 
-    public DataLoader()
+    // @Autowired
+    public DataLoader(final OwnerService ownerService, final VetService vetService)
     {
-        this.ownerService = new OwnerMapService();
-        this.vetService = new VetMapService();
+        super();
+
+        this.ownerService = ownerService;
+        this.vetService = vetService;
     }
 
     @Override
@@ -39,7 +43,7 @@ public class DataLoader
         owner2.setLastName("Glenanne");
         ownerService.save(owner2);
 
-        System.out.println("Loaded Owners ...");
+        getLogger().info("Created and stored Owners using {} ...", ownerService.getClass().getSimpleName());
 
         final Vet vet1 = new Vet();
         vet1.setId(1L);
@@ -53,6 +57,11 @@ public class DataLoader
         vet2.setLastName("Porter");
         vetService.save(vet2);
 
-        System.out.println("Loaded Vets ...");
+        getLogger().info("Created and stored Vets using {} ...", vetService.getClass().getSimpleName());
+    }
+
+    private Logger getLogger()
+    {
+        return logger;
     }
 }
