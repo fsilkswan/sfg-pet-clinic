@@ -9,7 +9,7 @@ public class SfgPetClinicApplication
     public static final String SERVICE_LAYER_STRATEGY_DATABASE = "database_services";
     public static final String SERVICE_LAYER_STRATEGY_MAP      = "map_services";
 
-    private static final String DEFAULT = "default";
+    // private static final String DEFAULT = "default";
 
     public static void main(final String[] args)
     {

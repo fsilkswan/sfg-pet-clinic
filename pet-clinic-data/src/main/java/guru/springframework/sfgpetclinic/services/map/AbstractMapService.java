@@ -1,45 +1,71 @@
 package guru.springframework.sfgpetclinic.services.map;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
+import guru.springframework.sfgpetclinic.model.BaseEntity;
 import guru.springframework.sfgpetclinic.services.CrudService;
 
-public abstract class AbstractMapService<T, ID>
-    implements CrudService<T, ID>
+public abstract class AbstractMapService<T extends BaseEntity>
+    implements CrudService<T, Long>
 {
-    private final Map<ID, T> map = new HashMap<>();
+    private final Map<Long, T> map = new HashMap<>();
 
     @Override
-    public void delete(final T entity)
+    public final void delete(final T entity)
     {
         map.entrySet().removeIf(entry -> entry.getValue().equals(entity));
     }
 
     @Override
-    public void deleteById(final ID id)
+    public final void deleteById(final Long id)
     {
         map.remove(id);
     }
 
     @Override
-    public Set<T> findAll()
+    public final Set<T> findAll()
     {
         return new HashSet<>(map.values());
     }
 
     @Override
-    public T findById(final ID id)
+    public final T findById(final Long id)
     {
         return map.get(id);
     }
 
-    protected final T save(final ID id, final T entity)
+    @Override
+    public final T save(final T entity)
     {
-        map.put(id, entity);
+        if( entity == null )
+        {
+            throw new RuntimeException("Entity cannot be null!");
+        }
+
+        if( entity.getId() == null )
+        {
+            entity.setId(getNextId());
+        }
+
+        map.put(entity.getId(), entity);
 
         return entity;
+    }
+
+    private Long getNextId()
+    {
+        try
+        {
+            return Collections.max(map.keySet()) + 1;
+        }
+        catch( final NoSuchElementException noSuElEx )
+        {
+            return 1L;
+        }
     }
 }

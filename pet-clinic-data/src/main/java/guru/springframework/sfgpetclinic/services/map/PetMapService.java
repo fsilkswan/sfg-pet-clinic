@@ -7,17 +7,7 @@ import guru.springframework.sfgpetclinic.services.PetService;
 
 @Service
 public final class PetMapService
-    extends AbstractMapService<Pet, Long>
+    extends AbstractMapService<Pet>
     implements PetService
 {
-    @Override
-    public Pet save(final Pet entity)
-    {
-        if( entity == null )
-        {
-            return null;
-        }
-
-        return save(entity.getId(), entity);
-    }
 }
