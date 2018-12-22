@@ -2,7 +2,7 @@ package guru.springframework.sfgpetclinic.model;
 
 import java.util.Set;
 
-public class Owner
+public final class Owner
     extends Person
 {
     private static final long serialVersionUID = 1L;
