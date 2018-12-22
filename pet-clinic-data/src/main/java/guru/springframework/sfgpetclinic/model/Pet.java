@@ -8,12 +8,18 @@ public final class Pet
     private static final long serialVersionUID = 1L;
 
     private LocalDate birthDate;
+    private String    name;
     private Owner     owner;
     private PetType   petType;
 
     public LocalDate getBirthDate()
     {
         return birthDate;
+    }
+
+    public String getName()
+    {
+        return name;
     }
 
     public Owner getOwner()
@@ -29,6 +35,11 @@ public final class Pet
     public void setBirthDate(final LocalDate birthDate)
     {
         this.birthDate = birthDate;
+    }
+
+    public void setName(final String name)
+    {
+        this.name = name;
     }
 
     public void setOwner(final Owner owner)

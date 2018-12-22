@@ -40,7 +40,7 @@ public abstract class AbstractMapService<T extends BaseEntity>
     }
 
     @Override
-    public final T save(final T entity)
+    public T save(final T entity)
     {
         if( entity == null )
         {

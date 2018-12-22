@@ -4,7 +4,8 @@ public final class VetSpecialty
     extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
-    private String            description;
+
+    private String description;
 
     public String getDescription()
     {
