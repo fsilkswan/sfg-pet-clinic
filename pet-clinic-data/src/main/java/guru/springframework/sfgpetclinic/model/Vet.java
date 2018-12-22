@@ -8,4 +8,14 @@ public final class Vet
     private static final long serialVersionUID = 1L;
 
     private Set<VetSpecialty> specialties;
+
+    public Set<VetSpecialty> getSpecialties()
+    {
+        return specialties;
+    }
+
+    public void setSpecialties(final Set<VetSpecialty> specialties)
+    {
+        this.specialties = specialties;
+    }
 }
