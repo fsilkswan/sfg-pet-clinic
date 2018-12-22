@@ -6,31 +6,45 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import guru.springframework.sfgpetclinic.model.Owner;
+import guru.springframework.sfgpetclinic.model.PetType;
 import guru.springframework.sfgpetclinic.model.Vet;
 import guru.springframework.sfgpetclinic.services.OwnerService;
+import guru.springframework.sfgpetclinic.services.PetTypeService;
 import guru.springframework.sfgpetclinic.services.VetService;
 
 @Component
 public class DataLoader
     implements CommandLineRunner
 {
-    private final Logger       logger = LoggerFactory.getLogger(getClass());
-    private final OwnerService ownerService;
-    private final VetService   vetService;
+    private final Logger         logger = LoggerFactory.getLogger(getClass());
+    private final OwnerService   ownerService;
+    private final PetTypeService petTypeService;
+    private final VetService     vetService;
 
     // @Autowired
-    public DataLoader(final OwnerService ownerService, final VetService vetService)
+    public DataLoader(final OwnerService ownerService, final VetService vetService, final PetTypeService petTypeService)
     {
         super();
 
         this.ownerService = ownerService;
         this.vetService = vetService;
+        this.petTypeService = petTypeService;
     }
 
     @Override
     public void run(final String... args)
         throws Exception
     {
+        final PetType dogPetType = new PetType();
+        dogPetType.setName("Dog");
+        petTypeService.save(dogPetType);
+
+        final PetType catPetType = new PetType();
+        catPetType.setName("Cat");
+        petTypeService.save(catPetType);
+
+        getLogger().info("Created and stored PetTypes using {} ...", petTypeService.getClass().getSimpleName());
+
         final Owner owner1 = new Owner();
         owner1.setFirstName("Michael");
         owner1.setLastName("Weston");
