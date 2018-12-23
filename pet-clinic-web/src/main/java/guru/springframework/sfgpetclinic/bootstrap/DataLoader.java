@@ -11,32 +11,45 @@ import guru.springframework.sfgpetclinic.model.Owner;
 import guru.springframework.sfgpetclinic.model.Pet;
 import guru.springframework.sfgpetclinic.model.PetType;
 import guru.springframework.sfgpetclinic.model.Vet;
+import guru.springframework.sfgpetclinic.model.VetSpecialty;
 import guru.springframework.sfgpetclinic.services.OwnerService;
 import guru.springframework.sfgpetclinic.services.PetTypeService;
 import guru.springframework.sfgpetclinic.services.VetService;
+import guru.springframework.sfgpetclinic.services.VetSpecialtyService;
 
 @Component
 public class DataLoader
     implements CommandLineRunner
 {
-    private final Logger         logger = LoggerFactory.getLogger(getClass());
-    private final OwnerService   ownerService;
-    private final PetTypeService petTypeService;
-    private final VetService     vetService;
+    private final Logger              logger = LoggerFactory.getLogger(getClass());
+    private final OwnerService        ownerService;
+    private final PetTypeService      petTypeService;
+    private final VetService          vetService;
+    private final VetSpecialtyService vetSpecialtyService;
 
     // @Autowired
-    public DataLoader(final OwnerService ownerService, final VetService vetService, final PetTypeService petTypeService)
+    public DataLoader(final OwnerService ownerService, final VetService vetService, final PetTypeService petTypeService, final VetSpecialtyService vetSpecialtyService)
     {
         super();
 
         this.ownerService = ownerService;
         this.vetService = vetService;
         this.petTypeService = petTypeService;
+        this.vetSpecialtyService = vetSpecialtyService;
     }
 
     @Override
     public void run(final String... args)
         throws Exception
+    {
+        final int count = petTypeService.findAll().size();
+        if( count == 0 )
+        {
+            createData();
+        }
+    }
+
+    private void createData()
     {
         final PetType dogPetType = new PetType();
         dogPetType.setName("Dog");
@@ -82,17 +95,31 @@ public class DataLoader
 
         getLogger().info("Created and stored Owners and Pets using {} ...", ownerService.getClass().getSimpleName());
 
+        final VetSpecialty radiology = new VetSpecialty();
+        radiology.setDescription("Radiology");
+        final VetSpecialty savedRadiology = vetSpecialtyService.save(radiology);
+
+        final VetSpecialty surgery = new VetSpecialty();
+        surgery.setDescription("Surgery");
+        final VetSpecialty savedSurgery = vetSpecialtyService.save(surgery);
+
+        final VetSpecialty dentistry = new VetSpecialty();
+        dentistry.setDescription("Dentistry");
+        final VetSpecialty savedDentistry = vetSpecialtyService.save(dentistry);
+
         final Vet vet1 = new Vet();
         vet1.setFirstName("Sam");
         vet1.setLastName("Axe");
+        vet1.getSpecialties().add(savedRadiology);
         vetService.save(vet1);
 
         final Vet vet2 = new Vet();
         vet2.setFirstName("Jessie");
         vet2.setLastName("Porter");
+        vet2.getSpecialties().add(savedSurgery);
         vetService.save(vet2);
 
-        getLogger().info("Created and stored Vets using {} ...", vetService.getClass().getSimpleName());
+        getLogger().info("Created and stored Vets and their Specialties using {} ...", vetService.getClass().getSimpleName());
     }
 
     private Logger getLogger()
