@@ -1,18 +1,19 @@
 package guru.springframework.sfgpetclinic.model;
 
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
+
+@MappedSuperclass
 public class Person
     extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
+    @Column(name = "first_name")
     private String firstName;
-    private String lastName;
 
-    // public Person(final String firstName, final String lastName)
-    // {
-    // this.firstName = firstName;
-    // this.lastName = lastName;
-    // }
+    @Column(name = "last_name")
+    private String lastName;
 
     public String getFirstName()
     {
