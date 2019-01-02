@@ -38,7 +38,8 @@ public class VetSDJpaService
     public Set<Vet> findAll()
     {
         final Set<Vet> vets = new HashSet<>();
-        vetRepository.findAll().forEach(vets::add);
+        vetRepository.findAll()
+                     .forEach(vets::add);
 
         return vets;
     }
@@ -52,7 +53,8 @@ public class VetSDJpaService
     @Override
     public Vet findByLastName(final String lastName)
     {
-        return vetRepository.findByLastName(lastName).orElse(null);
+        return vetRepository.findByLastName(lastName)
+                            .orElse(null);
     }
 
     @Override

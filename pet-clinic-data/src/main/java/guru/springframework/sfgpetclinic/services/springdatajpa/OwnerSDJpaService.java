@@ -45,7 +45,8 @@ public class OwnerSDJpaService
     public Set<Owner> findAll()
     {
         final Set<Owner> owners = new HashSet<>();
-        ownerRepository.findAll().forEach(owners::add);
+        ownerRepository.findAll()
+                       .forEach(owners::add);
 
         return owners;
     }
@@ -53,13 +54,15 @@ public class OwnerSDJpaService
     @Override
     public Owner findById(final Long id)
     {
-        return ownerRepository.findById(id).orElse(null);
+        return ownerRepository.findById(id)
+                              .orElse(null);
     }
 
     @Override
     public Owner findByLastName(final String lastName)
     {
-        return ownerRepository.findByLastName(lastName).orElse(null);
+        return ownerRepository.findByLastName(lastName)
+                              .orElse(null);
     }
 
     @Override
