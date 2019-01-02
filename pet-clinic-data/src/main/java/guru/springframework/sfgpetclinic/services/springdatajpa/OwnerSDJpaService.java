@@ -30,9 +30,9 @@ public class OwnerSDJpaService
     }
 
     @Override
-    public void delete(final Owner entity)
+    public void delete(final Owner owner)
     {
-        ownerRepository.delete(entity);
+        ownerRepository.delete(owner);
     }
 
     @Override
@@ -63,8 +63,8 @@ public class OwnerSDJpaService
     }
 
     @Override
-    public Owner save(final Owner entity)
+    public Owner save(final Owner owner)
     {
-        return ownerRepository.save(entity);
+        return ownerRepository.save(owner);
     }
 }
