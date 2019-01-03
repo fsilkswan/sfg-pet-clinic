@@ -103,7 +103,7 @@ public class DataLoader
 
         visitService.save(catVisit);
 
-        getLogger().info("Created and stored Owners and Pets using {} ...", ownerService.getClass().getSimpleName());
+        getLogger().info("Created and stored Owners, their Pets and corresponding Visits using.");
 
         final VetSpecialty radiology = new VetSpecialty();
         radiology.setDescription("Radiology");
@@ -129,7 +129,7 @@ public class DataLoader
         vet2.getSpecialties().add(savedSurgery);
         vetService.save(vet2);
 
-        getLogger().info("Created and stored Vets and their Specialties using {} ...", vetService.getClass().getSimpleName());
+        getLogger().info("Created and stored Vets and their Specialties.");
     }
 
     private Logger getLogger()
