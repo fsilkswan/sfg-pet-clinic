@@ -12,10 +12,12 @@ import guru.springframework.sfgpetclinic.model.Pet;
 import guru.springframework.sfgpetclinic.model.PetType;
 import guru.springframework.sfgpetclinic.model.Vet;
 import guru.springframework.sfgpetclinic.model.VetSpecialty;
+import guru.springframework.sfgpetclinic.model.Visit;
 import guru.springframework.sfgpetclinic.services.OwnerService;
 import guru.springframework.sfgpetclinic.services.PetTypeService;
 import guru.springframework.sfgpetclinic.services.VetService;
 import guru.springframework.sfgpetclinic.services.VetSpecialtyService;
+import guru.springframework.sfgpetclinic.services.VisitService;
 
 @Component
 public class DataLoader
@@ -26,16 +28,17 @@ public class DataLoader
     private final PetTypeService      petTypeService;
     private final VetService          vetService;
     private final VetSpecialtyService vetSpecialtyService;
+    private final VisitService        visitService;
 
     // @Autowired
-    public DataLoader(final OwnerService ownerService, final VetService vetService, final PetTypeService petTypeService, final VetSpecialtyService vetSpecialtyService)
+    public DataLoader(final OwnerService ownerService, final VetService vetService, final PetTypeService petTypeService, final VetSpecialtyService vetSpecialtyService,
+                      /**/final VisitService visitService)
     {
-        super();
-
         this.ownerService = ownerService;
         this.vetService = vetService;
         this.petTypeService = petTypeService;
         this.vetSpecialtyService = vetSpecialtyService;
+        this.visitService = visitService;
     }
 
     @Override
@@ -92,6 +95,13 @@ public class DataLoader
         owner2.getPets().add(fionasPet);
 
         ownerService.save(owner2);
+
+        final Visit catVisit = new Visit();
+        catVisit.setPet(fionasPet);
+        catVisit.setDate(LocalDate.now());
+        catVisit.setDescription("Sneezy Kitty");
+
+        visitService.save(catVisit);
 
         getLogger().info("Created and stored Owners and Pets using {} ...", ownerService.getClass().getSimpleName());
 
