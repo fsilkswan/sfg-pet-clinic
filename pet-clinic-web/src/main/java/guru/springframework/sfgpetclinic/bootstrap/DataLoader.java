@@ -76,8 +76,8 @@ public class DataLoader
                                 .name("Rosco")
                                 .owner(owner1)
                                 .build();
-        owner1.getPets().add(mikesPet);
 
+        owner1.getPets().add(mikesPet);
         ownerService.save(owner1);
 
         final Owner owner2 = Owner.builder()
@@ -94,15 +94,15 @@ public class DataLoader
                                  .name("Just Cat")
                                  .owner(owner2)
                                  .build();
-        owner2.getPets().add(fionasPet);
 
+        owner2.getPets().add(fionasPet);
         ownerService.save(owner2);
 
-        final Visit catVisit = new Visit();
-        catVisit.setPet(fionasPet);
-        catVisit.setDate(LocalDate.now());
-        catVisit.setDescription("Sneezy Kitty");
-
+        final Visit catVisit = Visit.builder()
+                                    .pet(fionasPet)
+                                    .date(LocalDate.now())
+                                    .description("Sneezy Kitty")
+                                    .build();
         visitService.save(catVisit);
 
         getLogger().info("Created and stored Owners, their Pets and corresponding Visits using.");
@@ -120,6 +120,7 @@ public class DataLoader
                             .firstName("Sam")
                             .lastName("Axe")
                             .build();
+
         vet1.getSpecialties().add(savedRadiology);
         vetService.save(vet1);
 
@@ -127,6 +128,7 @@ public class DataLoader
                             .firstName("Jessie")
                             .lastName("Porter")
                             .build();
+
         vet2.getSpecialties().add(savedSurgery);
         vetService.save(vet2);
 
