@@ -54,44 +54,46 @@ public class DataLoader
 
     private void createData()
     {
-        final PetType dogPetType = new PetType();
-        dogPetType.setName("Dog");
+        final PetType dogPetType = PetType.builder().name("Dog").build();
         final PetType savedDogPetType = petTypeService.save(dogPetType);
 
-        final PetType catPetType = new PetType();
-        catPetType.setName("Cat");
+        final PetType catPetType = PetType.builder().name("Cat").build();
         final PetType savedCatPetType = petTypeService.save(catPetType);
 
         getLogger().info("Created and stored PetTypes using {} ...", petTypeService.getClass().getSimpleName());
 
-        final Owner owner1 = new Owner();
-        owner1.setFirstName("Michael");
-        owner1.setLastName("Weston");
-        owner1.setAddress("123 Brickerel");
-        owner1.setCity("Miami");
-        owner1.setTelephone("123123123");
+        final Owner owner1 = Owner.builder()
+                                  .firstName("Michael")
+                                  .lastName("Weston")
+                                  .address("123 Brickerel")
+                                  .city("Miami")
+                                  .telephone("123123123")
+                                  .build();
 
-        final Pet mikesPet = new Pet();
-        mikesPet.setPetType(savedDogPetType);
-        mikesPet.setBirthDate(LocalDate.now());
-        mikesPet.setName("Rosco");
-        mikesPet.setOwner(owner1);
+        final Pet mikesPet = Pet.builder()
+                                .petType(savedDogPetType)
+                                .birthDate(LocalDate.now())
+                                .name("Rosco")
+                                .owner(owner1)
+                                .build();
         owner1.getPets().add(mikesPet);
 
         ownerService.save(owner1);
 
-        final Owner owner2 = new Owner();
-        owner2.setFirstName("Fiona");
-        owner2.setLastName("Glenanne");
-        owner2.setAddress("123 Brickerel");
-        owner2.setCity("Miami");
-        owner2.setTelephone("123123123");
+        final Owner owner2 = Owner.builder()
+                                  .firstName("Fiona")
+                                  .lastName("Glenanne")
+                                  .address("123 Brickerel")
+                                  .city("Miami")
+                                  .telephone("123123123")
+                                  .build();
 
-        final Pet fionasPet = new Pet();
-        fionasPet.setPetType(savedCatPetType);
-        fionasPet.setBirthDate(LocalDate.now());
-        fionasPet.setName("Just Cat");
-        fionasPet.setOwner(owner2);
+        final Pet fionasPet = Pet.builder()
+                                 .petType(savedCatPetType)
+                                 .birthDate(LocalDate.now())
+                                 .name("Just Cat")
+                                 .owner(owner2)
+                                 .build();
         owner2.getPets().add(fionasPet);
 
         ownerService.save(owner2);
@@ -105,27 +107,26 @@ public class DataLoader
 
         getLogger().info("Created and stored Owners, their Pets and corresponding Visits using.");
 
-        final VetSpecialty radiology = new VetSpecialty();
-        radiology.setDescription("Radiology");
+        final VetSpecialty radiology = VetSpecialty.builder().description("Radiology").build();
         final VetSpecialty savedRadiology = vetSpecialtyService.save(radiology);
 
-        final VetSpecialty surgery = new VetSpecialty();
-        surgery.setDescription("Surgery");
+        final VetSpecialty surgery = VetSpecialty.builder().description("Surgery").build();
         final VetSpecialty savedSurgery = vetSpecialtyService.save(surgery);
 
-        final VetSpecialty dentistry = new VetSpecialty();
-        dentistry.setDescription("Dentistry");
-        final VetSpecialty savedDentistry = vetSpecialtyService.save(dentistry);
+        final VetSpecialty dentistry = VetSpecialty.builder().description("Dentistry").build();
+        /* final VetSpecialty savedDentistry = */vetSpecialtyService.save(dentistry);
 
-        final Vet vet1 = new Vet();
-        vet1.setFirstName("Sam");
-        vet1.setLastName("Axe");
+        final Vet vet1 = Vet.builder()
+                            .firstName("Sam")
+                            .lastName("Axe")
+                            .build();
         vet1.getSpecialties().add(savedRadiology);
         vetService.save(vet1);
 
-        final Vet vet2 = new Vet();
-        vet2.setFirstName("Jessie");
-        vet2.setLastName("Porter");
+        final Vet vet2 = Vet.builder()
+                            .firstName("Jessie")
+                            .lastName("Porter")
+                            .build();
         vet2.getSpecialties().add(savedSurgery);
         vetService.save(vet2);
 

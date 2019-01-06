@@ -12,6 +12,17 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "pets")
 public final class Pet
@@ -35,49 +46,4 @@ public final class Pet
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pet")
     private final Set<Visit> visits = new HashSet<>();
-
-    public LocalDate getBirthDate()
-    {
-        return birthDate;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public Owner getOwner()
-    {
-        return owner;
-    }
-
-    public PetType getPetType()
-    {
-        return petType;
-    }
-
-    public Set<Visit> getVisits()
-    {
-        return visits;
-    }
-
-    public void setBirthDate(final LocalDate birthDate)
-    {
-        this.birthDate = birthDate;
-    }
-
-    public void setName(final String name)
-    {
-        this.name = name;
-    }
-
-    public void setOwner(final Owner owner)
-    {
-        this.owner = owner;
-    }
-
-    public void setPetType(final PetType petType)
-    {
-        this.petType = petType;
-    }
 }

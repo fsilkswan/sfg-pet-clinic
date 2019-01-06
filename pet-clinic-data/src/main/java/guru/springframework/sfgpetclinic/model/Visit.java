@@ -8,6 +8,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "visits")
 public final class Visit
@@ -24,34 +35,4 @@ public final class Visit
     @ManyToOne
     @JoinColumn(name = "pet_id")
     private Pet pet;
-
-    public LocalDate getDate()
-    {
-        return date;
-    }
-
-    public String getDescription()
-    {
-        return description;
-    }
-
-    public Pet getPet()
-    {
-        return pet;
-    }
-
-    public void setDate(final LocalDate date)
-    {
-        this.date = date;
-    }
-
-    public void setDescription(final String description)
-    {
-        this.description = description;
-    }
-
-    public void setPet(final Pet pet)
-    {
-        this.pet = pet;
-    }
 }

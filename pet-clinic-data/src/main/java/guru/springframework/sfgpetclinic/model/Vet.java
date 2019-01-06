@@ -10,6 +10,14 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "vets")
 public final class Vet
@@ -21,15 +29,21 @@ public final class Vet
     @JoinTable(name = "vets_specialties_map",
         /**/ joinColumns = @JoinColumn(name = "vet_id"),
         /**/ inverseJoinColumns = @JoinColumn(name = "vet_specialty_id"))
-    private Set<VetSpecialty> specialties = new HashSet<>();
+    private Set<VetSpecialty> specialties;
 
-    public Set<VetSpecialty> getSpecialties()
+    @Builder
+    public Vet(final String firstName, final String lastName,
+               /**/ final Set<VetSpecialty> specialties)
     {
-        return specialties;
-    }
+        super(firstName, lastName);
 
-    public void setSpecialties(final Set<VetSpecialty> specialties)
-    {
-        this.specialties = specialties;
+        if( specialties == null )
+        {
+            this.specialties = new HashSet<>();
+        }
+        else
+        {
+            this.specialties = specialties;
+        }
     }
 }
