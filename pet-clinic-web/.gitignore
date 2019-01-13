@@ -26,6 +26,7 @@ hs_err_pid*
 bin/
 classes/
 .settings/
+.externalToolBuilders/
 .classpath
 .project
 .springBeans
