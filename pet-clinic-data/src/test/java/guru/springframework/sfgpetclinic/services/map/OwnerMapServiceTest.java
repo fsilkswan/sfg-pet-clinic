@@ -22,7 +22,7 @@ public final class OwnerMapServiceTest
     private OwnerMapService cut;
 
     @BeforeEach
-    void beforeEach()
+    public void beforeEach()
         throws Exception
     {
         cut = new OwnerMapService(new PetTypeMapService(), new PetMapService());
@@ -33,7 +33,7 @@ public final class OwnerMapServiceTest
     }
 
     @Test
-    void testDelete()
+    public void testDelete()
     {
         cut.delete(cut.findById(1L));
 
@@ -43,7 +43,7 @@ public final class OwnerMapServiceTest
     }
 
     @Test
-    void testDeleteById()
+    public void testDeleteById()
     {
         cut.deleteById(1L);
 
@@ -53,7 +53,7 @@ public final class OwnerMapServiceTest
     }
 
     @Test
-    void testFindAll()
+    public void testFindAll()
     {
         final Set<Owner> foundOwners = cut.findAll();
         assertThat(foundOwners, is(not(nullValue())));
@@ -66,7 +66,7 @@ public final class OwnerMapServiceTest
     }
 
     @Test
-    void testFindById()
+    public void testFindById()
     {
         final Owner foundOwner = cut.findById(1L);
         assertThat(foundOwner, is(not(nullValue())));
@@ -75,7 +75,7 @@ public final class OwnerMapServiceTest
     }
 
     @Test
-    void testFindByLastName()
+    public void testFindByLastName()
     {
         final Owner foundOwner = cut.findByLastName(OWNER_LAST_NAME);
         assertThat(foundOwner, is(not(nullValue())));
@@ -83,14 +83,14 @@ public final class OwnerMapServiceTest
     }
 
     @Test
-    void testFindByLastNameReturnsNullForUnknownName()
+    public void testFindByLastNameReturnsNullForUnknownName()
     {
         final Owner foundOwner = cut.findByLastName("unknown");
         assertThat(foundOwner, is(nullValue()));
     }
 
     @Test
-    void testSaveOwnerWithIdAlreadySet()
+    public void testSaveOwnerWithIdAlreadySet()
     {
         final Owner owner = Owner.builder().build();
         owner.setId(3L);
@@ -101,7 +101,7 @@ public final class OwnerMapServiceTest
     }
 
     @Test
-    void testSaveOwnerWithIdMissing()
+    public void testSaveOwnerWithIdMissing()
     {
         final Owner owner = Owner.builder().build();
         final Owner savedOwner = cut.save(owner);
