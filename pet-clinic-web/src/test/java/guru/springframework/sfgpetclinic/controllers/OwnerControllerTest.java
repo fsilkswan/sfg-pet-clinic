@@ -3,6 +3,10 @@ package guru.springframework.sfgpetclinic.controllers;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -99,6 +103,21 @@ public final class OwnerControllerTest
         throws Exception
     {
         testListOwners("/");
+    }
+
+    @Test
+    void testShowOwnerById()
+        throws Exception
+    {
+        final Owner owner = owners.stream().filter(currOwner -> Long.valueOf(1L).equals(currOwner.getId())).findFirst().get();
+        when(ownerServiceMock.findById(anyLong())).thenReturn(owner);
+
+        mockMvc.perform(get("/owners/1"))
+               .andExpect(status().isOk())
+               .andExpect(view().name("owners/ownerDetails"))
+               .andExpect(model().attribute("owner", is(not(nullValue()))));
+
+        verify(ownerServiceMock, times(1)).findById(eq(1L));
     }
 
     private void testListOwners(final String path)
