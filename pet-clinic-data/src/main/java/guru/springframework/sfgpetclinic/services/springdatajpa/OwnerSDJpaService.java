@@ -1,6 +1,7 @@
 package guru.springframework.sfgpetclinic.services.springdatajpa;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.context.annotation.Profile;
@@ -21,7 +22,8 @@ public class OwnerSDJpaService
     private final PetRepository     petRepository;
     private final PetTypeRepository petTypeRepository;
 
-    public OwnerSDJpaService(final OwnerRepository ownerRepository, final PetRepository petRepository,
+    public OwnerSDJpaService(final OwnerRepository ownerRepository,
+                             /**/ final PetRepository petRepository,
                              /**/ final PetTypeRepository petTypeRepository)
     {
         this.ownerRepository = ownerRepository;
@@ -49,6 +51,12 @@ public class OwnerSDJpaService
                        .forEach(owners::add);
 
         return owners;
+    }
+
+    @Override
+    public List<Owner> findAllByLastNameLike(final String lastName)
+    {
+        return ownerRepository.findAllByLastNameLike(lastName);
     }
 
     @Override

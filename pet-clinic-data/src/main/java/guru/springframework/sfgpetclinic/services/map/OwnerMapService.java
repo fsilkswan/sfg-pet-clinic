@@ -1,5 +1,8 @@
 package guru.springframework.sfgpetclinic.services.map;
 
+import static java.util.stream.Collectors.toList;
+
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.context.annotation.Profile;
@@ -25,6 +28,32 @@ public final class OwnerMapService
     {
         this.petTypeService = petTypeService;
         this.petService = petService;
+    }
+
+    @Override
+    public List<Owner> findAllByLastNameLike(final String lastName)
+    {
+        if( lastName == null )
+        {
+            return findAll().stream()
+                            .collect(toList());
+        }
+
+        final String lcLastName = lastName.toLowerCase();
+        final List<Owner> result = findAll().stream()
+                                            .filter(currOwner ->
+                                            {
+                                                final String currLastName = currOwner.getLastName().toLowerCase();
+                                                if( currLastName.contains(lcLastName) == true )
+                                                {
+                                                    return true;
+                                                }
+
+                                                return false;
+                                            })
+                                            .collect(toList());
+
+        return result;
     }
 
     @Override
@@ -57,6 +86,5 @@ public final class OwnerMapService
         }
 
         return super.save(owner);
-
     }
 }
