@@ -1,5 +1,7 @@
 package guru.springframework.sfgpetclinic.services.map;
 
+import static java.util.Collections.unmodifiableSet;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,7 +32,7 @@ public abstract class AbstractMapService<T extends BaseEntity>
     @Override
     public final Set<T> findAll()
     {
-        return new HashSet<>(map.values());
+        return unmodifiableSet(new HashSet<>(map.values()));
     }
 
     @Override
