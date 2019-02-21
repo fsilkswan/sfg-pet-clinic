@@ -1,5 +1,7 @@
 package guru.springframework.sfgpetclinic.controllers;
 
+import static org.apache.logging.log4j.util.Strings.isBlank;
+
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,8 @@ import guru.springframework.sfgpetclinic.services.OwnerService;
 @Controller
 public class OwnerController
 {
+    protected final static String SQL_WILDCARD = "%";
+
     private final OwnerService ownerService;
 
     public OwnerController(final OwnerService ownerService)
@@ -29,14 +33,19 @@ public class OwnerController
     @GetMapping(path = { "" })
     public String processFindForm(Owner owner, final BindingResult result, final Model model)
     {
-        // Allow parameterless GET request for /owners to return all records:
-        if( owner.getLastName() == null )
+        final String lastNameSearchString;
+        if( isBlank(owner.getLastName()) == true )
         {
-            owner.setLastName(""); // Empty string signifies broadest possible search!
+            // Allow parameterless GET request for "/owners" to return all records:
+            lastNameSearchString = SQL_WILDCARD;
+        }
+        else
+        {
+            lastNameSearchString = SQL_WILDCARD + owner.getLastName() + SQL_WILDCARD;
         }
 
         // Find owners by last name:
-        final List<Owner> serviceResult = ownerService.findAllByLastNameLike(owner.getLastName());
+        final List<Owner> serviceResult = ownerService.findAllByLastNameLike(lastNameSearchString);
         if( serviceResult.isEmpty() == true )
         {
             // No owners found:
