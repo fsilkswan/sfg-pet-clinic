@@ -1,5 +1,6 @@
 package guru.springframework.sfgpetclinic.controllers;
 
+import static guru.springframework.sfgpetclinic.controllers.OwnerController.SQL_WILDCARD;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.equalTo;
@@ -20,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -69,34 +71,54 @@ public final class OwnerControllerTest
     }
 
     @Test
-    void testProcessFindFormReturnMany()
+    void testProcessFindFormReturnAll()
         throws Exception
     {
-        when(ownerServiceMock.findAllByLastNameLike(anyString())).thenReturn(owners.stream().collect(toList()));
+        final List<Owner> allOwnersList = owners.stream().collect(toList());
+
+        when(ownerServiceMock.findAllByLastNameLike(anyString())).thenReturn(allOwnersList);
 
         mockMvc.perform(get("/owners"))
                .andExpect(status().isOk())
                .andExpect(view().name(is(equalTo("owners/ownersList"))))
                .andExpect(model().attribute("owners", hasSize(equalTo(3))));
 
-        verify(ownerServiceMock, times(1)).findAllByLastNameLike(eq(""));
+        verify(ownerServiceMock, times(1)).findAllByLastNameLike(eq(SQL_WILDCARD));
+    }
+
+    @Test
+    void testProcessFindFormReturnMany()
+        throws Exception
+    {
+        final String searchString = "many";
+        final List<Owner> manyOwnersList = owners.stream().filter(currOwner -> currOwner.getId() != 1L).collect(toList());
+
+        when(ownerServiceMock.findAllByLastNameLike(anyString())).thenReturn(manyOwnersList);
+
+        mockMvc.perform(get("/owners")
+                                      .param("lastName", searchString))
+               .andExpect(status().isOk())
+               .andExpect(view().name(is(equalTo("owners/ownersList"))))
+               .andExpect(model().attribute("owners", hasSize(equalTo(2))));
+
+        verify(ownerServiceMock, times(1)).findAllByLastNameLike(eq(SQL_WILDCARD + searchString + SQL_WILDCARD));
     }
 
     @Test
     void testProcessFindFormReturnOne()
         throws Exception
     {
-        final Owner owner = owners.stream().filter(currOwner -> Long.valueOf(1L).equals(currOwner.getId())).findFirst().get();
+        final String searchString = "one";
+        final Owner owner = owners.stream().filter(currOwner -> currOwner.getId() == 1L).findFirst().get();
+
         when(ownerServiceMock.findAllByLastNameLike(anyString())).thenReturn(asList(owner));
 
         mockMvc.perform(get("/owners")
-        // .requestAttr("owner", Owner.builder().lastName(owner.getLastName()).build())
-        )
+                                      .param("lastName", searchString))
                .andExpect(status().isFound())
                .andExpect(view().name(is(equalTo("redirect:/owners/1"))));
 
-        // verify(ownerServiceMock, times(1)).findAllByLastNameLike(eq(owner.getLastName()));
-        verify(ownerServiceMock, times(1)).findAllByLastNameLike(eq(""));
+        verify(ownerServiceMock, times(1)).findAllByLastNameLike(eq(SQL_WILDCARD + searchString + SQL_WILDCARD));
     }
 
     @Test
