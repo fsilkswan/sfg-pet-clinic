@@ -37,6 +37,9 @@ public class OwnerController
         this.ownerService = ownerService;
     }
 
+    /**
+     * @see #showCreationForm(Model)
+     */
     @PostMapping(path = { "/new" })
     public String processCreationForm(@Valid final Owner owner, final BindingResult result)
     {
@@ -50,6 +53,9 @@ public class OwnerController
         return "redirect:/owners/" + savedOwner.getId();
     }
 
+    /**
+     * @see #showFindForm(Model)
+     */
     @GetMapping(path = { "" })
     public String processFindForm(Owner owner, final BindingResult result, final Model model)
     {
@@ -85,6 +91,9 @@ public class OwnerController
         return VIEW_NAME_OWNERS_LIST;
     }
 
+    /**
+     * @see #showUpdateForm(Long, Model)
+     */
     @PostMapping(path = { "/{ownerId}/edit" })
     public String processUpdateForm(@PathVariable final Long ownerId, @Valid final Owner owner, final BindingResult result)
     {
@@ -105,6 +114,9 @@ public class OwnerController
         dataBinder.setDisallowedFields("id");
     }
 
+    /**
+     * @see #processCreationForm(Owner, BindingResult)
+     */
     @GetMapping(path = { "/new" })
     public String showCreationForm(final Model model)
     {
@@ -113,6 +125,9 @@ public class OwnerController
         return VIEW_NAME_CREATE_OR_UPDATE_OWNER_FORM;
     }
 
+    /**
+     * @see #processFindForm(Owner, BindingResult, Model)
+     */
     @GetMapping(path = { "/find" })
     public String showFindForm(final Model model)
     {
@@ -132,6 +147,9 @@ public class OwnerController
         return mav;
     }
 
+    /**
+     * @see #processUpdateForm(Long, Owner, BindingResult)
+     */
     @GetMapping(path = { "/{ownerId}/edit" })
     public String showUpdateForm(@PathVariable final Long ownerId, final Model model)
     {
