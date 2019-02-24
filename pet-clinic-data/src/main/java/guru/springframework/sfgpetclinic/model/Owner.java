@@ -37,10 +37,11 @@ public final class Owner
     private String telephone;
 
     @Builder
-    public Owner(final String firstName, final String lastName,
+    public Owner(final Long id,
+                 /**/ final String firstName, final String lastName,
                  /**/ final String address, final String city, final String telephone, final Set<Pet> pets)
     {
-        super(firstName, lastName);
+        super(id, firstName, lastName);
 
         this.address = address;
         this.city = city;

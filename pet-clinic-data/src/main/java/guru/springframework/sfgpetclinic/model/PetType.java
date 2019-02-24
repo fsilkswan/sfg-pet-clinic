@@ -14,7 +14,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Entity
 @Table(name = "pet_types")
 public final class PetType
@@ -24,4 +23,12 @@ public final class PetType
 
     @Column(name = "name")
     private String name;
+
+    @Builder
+    public PetType(final Long id, final String name)
+    {
+        super(id);
+
+        this.name = name;
+    }
 }

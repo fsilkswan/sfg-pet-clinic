@@ -3,14 +3,12 @@ package guru.springframework.sfgpetclinic.model;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass
 public class Person
@@ -23,4 +21,12 @@ public class Person
 
     @Column(name = "last_name")
     private String lastName;
+
+    public Person(final Long id, final String firstName, final String lastName)
+    {
+        super(id);
+
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 }

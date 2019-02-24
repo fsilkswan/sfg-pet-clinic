@@ -62,14 +62,17 @@ public final class OwnerControllerTest
     void beforeEach()
         throws Exception
     {
-        final Owner owner1 = Owner.builder().build();
-        owner1.setId(1L);
+        final Owner owner1 = Owner.builder()
+                                  .id(1L)
+                                  .build();
 
-        final Owner owner2 = Owner.builder().build();
-        owner2.setId(2L);
+        final Owner owner2 = Owner.builder()
+                                  .id(2L)
+                                  .build();
 
-        final Owner owner3 = Owner.builder().build();
-        owner3.setId(3L);
+        final Owner owner3 = Owner.builder()
+                                  .id(3L)
+                                  .build();
 
         owners = new HashSet<>();
         owners.add(owner1);
@@ -83,8 +86,9 @@ public final class OwnerControllerTest
     void testProcessCreationForm()
         throws Exception
     {
-        final Owner savedOwner = Owner.builder().build();
-        savedOwner.setId(10L);
+        final Owner savedOwner = Owner.builder()
+                                      .id(10L)
+                                      .build();
 
         when(ownerServiceMock.save(any())).thenReturn(savedOwner);
 

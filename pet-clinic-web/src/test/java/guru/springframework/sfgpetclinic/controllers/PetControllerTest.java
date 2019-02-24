@@ -41,11 +41,15 @@ class PetControllerTest
 
     private MockMvc mockMvc;
 
+    private Owner owner;
+
     @Mock
     private OwnerService ownerServiceMock;
 
     @Mock
     private PetService petServiceMock;
+
+    private Set<PetType> petTypes;
 
     @Mock
     private PetTypeService petTypeServiceMock;
@@ -60,6 +64,23 @@ class PetControllerTest
     void beforeEach()
         throws Exception
     {
+        owner = Owner.builder()
+                     .id(1L)
+                     .build();
+
+        final PetType dog = PetType.builder()
+                                   .id(1L)
+                                   .name("Dog")
+                                   .build();
+
+        final PetType cat = PetType.builder()
+                                   .id(2L)
+                                   .name("Cat")
+                                   .build();
+
+        petTypes = asList(dog, cat).stream()
+                                   .collect(toSet());
+
         mockMvc = MockMvcBuilders.standaloneSetup(cut).build();
     }
 
@@ -73,7 +94,6 @@ class PetControllerTest
     void testFindOwner()
         throws Exception
     {
-        final Owner owner = Owner.builder().build();
         when(ownerServiceMock.findById(anyLong())).thenReturn(owner);
 
         final Owner foundOwner = cut.findOwner(1L);
@@ -93,12 +113,11 @@ class PetControllerTest
     void testPopulatePetTypes()
         throws Exception
     {
-        final Set<PetType> allPetTypes = asList(PetType.builder().build()).stream().collect(toSet());
-        when(petTypeServiceMock.findAll()).thenReturn(allPetTypes);
+        when(petTypeServiceMock.findAll()).thenReturn(petTypes);
 
         final Collection<PetType> foundPetTypes = cut.populatePetTypes();
 
-        assertThat(foundPetTypes, is(sameInstance(allPetTypes)));
+        assertThat(foundPetTypes, is(sameInstance(petTypes)));
         verify(petTypeServiceMock, times(1)).findAll();
         verifyZeroInteractions(petServiceMock, ownerServiceMock);
     }

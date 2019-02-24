@@ -32,10 +32,11 @@ public final class Vet
     private Set<VetSpecialty> specialties;
 
     @Builder
-    public Vet(final String firstName, final String lastName,
+    public Vet(final Long id,
+               /**/final String firstName, final String lastName,
                /**/ final Set<VetSpecialty> specialties)
     {
-        super(firstName, lastName);
+        super(id, firstName, lastName);
 
         if( specialties == null )
         {
