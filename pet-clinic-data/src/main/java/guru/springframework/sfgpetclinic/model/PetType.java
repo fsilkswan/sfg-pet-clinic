@@ -31,4 +31,10 @@ public final class PetType
 
         this.name = name;
     }
+
+    @Override
+    public String toString()
+    {
+        return getName();
+    }
 }

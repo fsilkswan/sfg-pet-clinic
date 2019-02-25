@@ -31,7 +31,7 @@ public final class Owner
     private String city;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
-    private Set<Pet> pets;
+    private Set<Pet> pets = new HashSet<>();
 
     @Column(name = "telephone")
     private String telephone;
@@ -47,11 +47,7 @@ public final class Owner
         this.city = city;
         this.telephone = telephone;
 
-        if( pets == null )
-        {
-            this.pets = new HashSet<>();
-        }
-        else
+        if( pets != null )
         {
             this.pets = pets;
         }

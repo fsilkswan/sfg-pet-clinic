@@ -1,17 +1,27 @@
 package guru.springframework.sfgpetclinic.controllers;
 
+import static guru.springframework.sfgpetclinic.controllers.PetController.VIEW_NAME_CREATE_OR_UPDATE_PET_FORM;
+import static java.time.Month.OCTOBER;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toSet;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.sameInstance;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Set;
 
@@ -25,6 +35,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import guru.springframework.sfgpetclinic.model.Owner;
+import guru.springframework.sfgpetclinic.model.Pet;
 import guru.springframework.sfgpetclinic.model.PetType;
 import guru.springframework.sfgpetclinic.services.OwnerService;
 import guru.springframework.sfgpetclinic.services.PetService;
@@ -120,5 +131,83 @@ class PetControllerTest
         assertThat(foundPetTypes, is(sameInstance(petTypes)));
         verify(petTypeServiceMock, times(1)).findAll();
         verifyZeroInteractions(petServiceMock, ownerServiceMock);
+    }
+
+    @Test
+    void testProcessCreationForm()
+        throws Exception
+    {
+        when(ownerServiceMock.findById(anyLong())).thenReturn(owner);
+        when(petTypeServiceMock.findAll()).thenReturn(petTypes);
+
+        mockMvc.perform(post("/owners/1/pets/new"))
+               .andExpect(status().isFound())
+               .andExpect(view().name(is(equalTo("redirect:/owners/1"))));
+
+        verify(ownerServiceMock, times(1)).findById(eq(1L));
+        verify(petTypeServiceMock, times(1)).findAll();
+        verify(petServiceMock, times(1)).save(any());
+    }
+
+    @Test
+    void testProcessUpdateForm()
+        throws Exception
+    {
+        when(ownerServiceMock.findById(anyLong())).thenReturn(owner);
+        when(petTypeServiceMock.findAll()).thenReturn(petTypes);
+
+        mockMvc.perform(post("/owners/1/pets/3/edit"))
+               .andExpect(status().isFound())
+               .andExpect(view().name(is(equalTo("redirect:/owners/1"))));
+
+        verify(ownerServiceMock, times(1)).findById(eq(1L));
+        verify(petTypeServiceMock, times(1)).findAll();
+        verify(petServiceMock, times(1)).save(any());
+    }
+
+    @Test
+    void testShowCreationForm()
+        throws Exception
+    {
+        when(ownerServiceMock.findById(anyLong())).thenReturn(owner);
+        when(petTypeServiceMock.findAll()).thenReturn(petTypes);
+
+        mockMvc.perform(get("/owners/1/pets/new"))
+               .andExpect(status().isOk())
+               .andExpect(view().name(is(equalTo(VIEW_NAME_CREATE_OR_UPDATE_PET_FORM))))
+               .andExpect(model().attributeExists("owner"))
+               .andExpect(model().attributeExists("pet"))
+               .andExpect(model().attributeExists("petTypes"));
+
+        verify(ownerServiceMock, times(1)).findById(eq(1L));
+        verify(petTypeServiceMock, times(1)).findAll();
+        verifyZeroInteractions(petServiceMock);
+    }
+
+    @Test
+    void testShowUpdateForm()
+        throws Exception
+    {
+        final Pet petToUpdate = Pet.builder()
+                                   .id(3L)
+                                   .name("Malibu")
+                                   .petType(petTypes.stream().filter(currPetType -> currPetType.getId() == 2L).findFirst().get())
+                                   .birthDate(LocalDate.of(2014, OCTOBER, 14))
+                                   .build();
+
+        when(ownerServiceMock.findById(anyLong())).thenReturn(owner);
+        when(petTypeServiceMock.findAll()).thenReturn(petTypes);
+        when(petServiceMock.findById(anyLong())).thenReturn(petToUpdate);
+
+        mockMvc.perform(get("/owners/1/pets/3/edit"))
+               .andExpect(status().isOk())
+               .andExpect(view().name(is(equalTo(VIEW_NAME_CREATE_OR_UPDATE_PET_FORM))))
+               .andExpect(model().attributeExists("owner"))
+               .andExpect(model().attributeExists("pet"))
+               .andExpect(model().attributeExists("petTypes"));
+
+        verify(ownerServiceMock, times(1)).findById(eq(1L));
+        verify(petTypeServiceMock, times(1)).findAll();
+        verify(petServiceMock, times(1)).findById(eq(3L));
     }
 }

@@ -20,8 +20,8 @@ import org.springframework.web.servlet.ModelAndView;
 import guru.springframework.sfgpetclinic.model.Owner;
 import guru.springframework.sfgpetclinic.services.OwnerService;
 
-@RequestMapping("/owners")
 @Controller
+@RequestMapping("/owners")
 public class OwnerController
 {
     protected final static String SQL_WILDCARD                          = "%";
@@ -131,7 +131,10 @@ public class OwnerController
     @GetMapping(path = { "/find" })
     public String showFindForm(final Model model)
     {
-        model.addAttribute("owner", Owner.builder().build());
+        final Owner newOwner = Owner.builder()
+                                    .build();
+
+        model.addAttribute("owner", newOwner);
 
         return VIEW_NAME_FIND_OWNERS_FORM;
     }
