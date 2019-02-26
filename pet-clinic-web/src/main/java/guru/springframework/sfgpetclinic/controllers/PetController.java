@@ -1,7 +1,10 @@
 package guru.springframework.sfgpetclinic.controllers;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 import javax.validation.Valid;
 
@@ -24,6 +27,7 @@ import guru.springframework.sfgpetclinic.model.PetType;
 import guru.springframework.sfgpetclinic.services.OwnerService;
 import guru.springframework.sfgpetclinic.services.PetService;
 import guru.springframework.sfgpetclinic.services.PetTypeService;
+import guru.springframework.sfgpetclinic.validators.PetValidator;
 
 @Controller
 @RequestMapping("/owners/{ownerId}")
@@ -57,13 +61,15 @@ public class PetController
     @InitBinder("pet")
     public void initPetBinder(final WebDataBinder dataBinder)
     {
-        // FIXME: dataBinder.setValidator(new PetValidator());
+        dataBinder.setValidator(new PetValidator());
     }
 
     @ModelAttribute("petTypes")
     public Collection<PetType> populatePetTypes()
     {
-        return petTypeService.findAll();
+        return StreamSupport.stream(petTypeService.findAll().spliterator(), false)
+                            .sorted((pt1, pt2) -> pt1.getName().compareTo(pt2.getName()))
+                            .collect(toList());
     }
 
     @PostMapping(path = { "/pets/new" })
@@ -81,6 +87,7 @@ public class PetController
         }
 
         owner.getPets().add(pet);
+        // pet.setOwner(owner); TODO: required?
 
         if( result.hasErrors() == true )
         {
@@ -101,6 +108,7 @@ public class PetController
         {
             pet.setOwner(owner);
             model.addAttribute("pet", pet);
+
             return VIEW_NAME_CREATE_OR_UPDATE_PET_FORM;
         }
 
