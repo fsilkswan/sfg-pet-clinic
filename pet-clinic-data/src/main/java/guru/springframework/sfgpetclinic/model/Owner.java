@@ -1,6 +1,9 @@
 package guru.springframework.sfgpetclinic.model;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -51,5 +54,12 @@ public final class Owner
         {
             this.pets = pets;
         }
+    }
+
+    public List<Pet> getPetsOrdered()
+    {
+        return getPets().stream()
+                        .sorted((p1, p2) -> p1.getName().compareTo(p2.getName()))
+                        .collect(toList());
     }
 }

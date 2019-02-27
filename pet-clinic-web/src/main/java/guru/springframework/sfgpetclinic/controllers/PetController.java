@@ -90,7 +90,7 @@ public final class PetController
         }
 
         owner.getPets().add(pet);
-        // pet.setOwner(owner); TODO: required?
+        pet.setOwner(owner);
 
         if( result.hasErrors() == true )
         {
@@ -108,17 +108,17 @@ public final class PetController
      * @see #showUpdateForm(Long, ModelMap)
      */
     @PostMapping(path = { "/pets/{petId}/edit" })
-    public String processUpdateForm(final Owner owner, @Valid final Pet pet, final BindingResult result, final Model model)
+    public String processUpdateForm(@PathVariable final Long petId, final Owner owner, @Valid final Pet pet, final BindingResult result, final Model model)
     {
+        pet.setId(petId);
+        pet.setOwner(owner);
+
         if( result.hasErrors() == true )
         {
-            pet.setOwner(owner);
             model.addAttribute("pet", pet);
 
             return VIEW_NAME_CREATE_OR_UPDATE_PET_FORM;
         }
-
-        // owner.getPets().add(pet); // TODO: Why should this be necessary?
 
         petService.save(pet);
 

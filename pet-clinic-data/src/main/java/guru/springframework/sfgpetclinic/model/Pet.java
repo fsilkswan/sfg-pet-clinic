@@ -1,7 +1,10 @@
 package guru.springframework.sfgpetclinic.model;
 
+import static java.util.stream.Collectors.toList;
+
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -42,7 +45,7 @@ public final class Pet
     private PetType petType;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pet")
-    private final Set<Visit> visits = new HashSet<>();
+    private Set<Visit> visits = new HashSet<>();
 
     @Builder
     public Pet(final Long id,
@@ -57,7 +60,40 @@ public final class Pet
 
         if( visits != null )
         {
-            this.visits.addAll(visits);
+            this.visits = visits;
         }
+    }
+
+    /**
+     * Helper method to add a visit to this pet and also assigns this pet to the visit.
+     *
+     * @param visit
+     *            The visit to add.
+     */
+    public void addVisit(final Visit visit)
+    {
+        if( visit == null )
+        {
+            return;
+        }
+
+        getVisits().add(visit);
+        visit.setPet(this);
+    }
+
+    public List<Visit> getVisitsOrdered()
+    {
+        return getVisits().stream()
+                          .sorted((v1, v2) ->
+                          {
+                              final int dateCompResult = v1.getDate().compareTo(v2.getDate());
+                              if( dateCompResult != 0 )
+                              {
+                                  return dateCompResult;
+                              }
+
+                              return v1.getDescription().compareTo(v2.getDescription());
+                          })
+                          .collect(toList());
     }
 }
