@@ -7,11 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import guru.springframework.sfgpetclinic.services.VetService;
 
 @Controller
-public class VetController
+public final class VetController
 {
     private final VetService vetService;
 
-    // @Autowired
     public VetController(final VetService vetService)
     {
         this.vetService = vetService;

@@ -22,7 +22,7 @@ import guru.springframework.sfgpetclinic.services.OwnerService;
 
 @Controller
 @RequestMapping("/owners")
-public class OwnerController
+public final class OwnerController
 {
     protected final static String SQL_WILDCARD                          = "%";
     protected static final String VIEW_NAME_CREATE_OR_UPDATE_OWNER_FORM = "owners/createOrUpdateOwnerForm";

@@ -6,6 +6,7 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toSet;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.mockito.ArgumentMatchers.any;
@@ -128,7 +129,7 @@ class PetControllerTest
 
         final Collection<PetType> foundPetTypes = cut.populatePetTypes();
 
-        assertThat(foundPetTypes, is(sameInstance(petTypes)));
+        assertThat(foundPetTypes, hasSize(equalTo(2)));
         verify(petTypeServiceMock, times(1)).findAll();
         verifyZeroInteractions(petServiceMock, ownerServiceMock);
     }
@@ -140,7 +141,10 @@ class PetControllerTest
         when(ownerServiceMock.findById(anyLong())).thenReturn(owner);
         when(petTypeServiceMock.findAll()).thenReturn(petTypes);
 
-        mockMvc.perform(post("/owners/1/pets/new"))
+        mockMvc.perform(post("/owners/1/pets/new")
+                                                  .param("name", "Malibu")
+                                                  .param("petType", "Cat")
+                                                  .param("birthDate", "2014-10-15"))
                .andExpect(status().isFound())
                .andExpect(view().name(is(equalTo("redirect:/owners/1"))));
 
@@ -156,7 +160,10 @@ class PetControllerTest
         when(ownerServiceMock.findById(anyLong())).thenReturn(owner);
         when(petTypeServiceMock.findAll()).thenReturn(petTypes);
 
-        mockMvc.perform(post("/owners/1/pets/3/edit"))
+        mockMvc.perform(post("/owners/1/pets/3/edit")
+                                                     .param("name", "Sunrise")
+                                                     .param("petType", "Cat")
+                                                     .param("birthDate", "2014-08-27"))
                .andExpect(status().isFound())
                .andExpect(view().name(is(equalTo("redirect:/owners/1"))));
 

@@ -31,7 +31,7 @@ import guru.springframework.sfgpetclinic.validators.PetValidator;
 
 @Controller
 @RequestMapping("/owners/{ownerId}")
-public class PetController
+public final class PetController
 {
     protected static final String VIEW_NAME_CREATE_OR_UPDATE_PET_FORM = "pets/createOrUpdatePetForm";
 
@@ -72,6 +72,9 @@ public class PetController
                             .collect(toList());
     }
 
+    /**
+     * @see #showCreationForm(Owner, Model)
+     */
     @PostMapping(path = { "/pets/new" })
     public String processCreationForm(final Owner owner, @Valid final Pet pet, final BindingResult result, final Model model)
     {
@@ -101,6 +104,9 @@ public class PetController
         return "redirect:/owners/" + owner.getId();
     }
 
+    /**
+     * @see #showUpdateForm(Long, ModelMap)
+     */
     @PostMapping(path = { "/pets/{petId}/edit" })
     public String processUpdateForm(final Owner owner, @Valid final Pet pet, final BindingResult result, final Model model)
     {
@@ -126,6 +132,9 @@ public class PetController
         dataBinder.setDisallowedFields("id");
     }
 
+    /**
+     * @see #processCreationForm(Owner, Pet, BindingResult, Model)
+     */
     @GetMapping(path = { "/pets/new" })
     public String showCreationForm(final Owner owner, final Model model)
     {
@@ -138,6 +147,9 @@ public class PetController
         return VIEW_NAME_CREATE_OR_UPDATE_PET_FORM;
     }
 
+    /**
+     * @see #processUpdateForm(Owner, Pet, BindingResult, Model)
+     */
     @GetMapping(path = { "/pets/{petId}/edit" })
     public String showUpdateForm(@PathVariable final Long petId, final ModelMap model)
     {
